@@ -1,4 +1,3 @@
-
 -- ============================================================
 --  BASE DE DADES: Pillam Ltd. Co.
 --  Aplicació d'Escalada - JDBC / MySQL 8
@@ -23,7 +22,7 @@
 --         - si tipus_via='esportiva' no existeix ja un llarg per a aquella via
 --         - el id_via correspon a una via del tipus indicat
 --         - llargada esportiva: 5-30m | classica/gel: 15-30m
--- ====================================escalador========================
+-- ============================================================
 
 CREATE DATABASE IF NOT EXISTS Pillam
     CHARACTER SET utf8mb4
@@ -182,7 +181,7 @@ CREATE TABLE via_gel (
 
 
 -- ============================================================
---  LLARG (taula unificada per als 3 tipus de via)
+--  TRAMS (taula unificada per als 3 tipus de via)
 -- ============================================================
 --  Per tenir FKs reals, cada tipus de via té la seva pròpia
 --  columna nullable. El CHECK garanteix que exactament una
@@ -190,22 +189,22 @@ CREATE TABLE via_gel (
 --
 --  Regles de negoci que Java ha de fer complir:
 --    · id_via_esportiva NOT NULL
---        -> exactament 1 llarg per via (num_llarg sempre = 1)
+--        -> exactament 1 tram per via (num_tram sempre = 1)
 --        -> llargada: 5-30 m
 --    · id_via_classica / id_via_gel NOT NULL
---        -> llargs múltiples (num_llarg: 1, 2, 3...)
---        -> llargada per llarg: 15-30 m
---    · En qualsevol INSERT/UPDATE/DELETE de llarg, Java
+--        -> trams múltiples (num_tram: 1, 2, 3...)
+--        -> llargada per tram: 15-30 m
+--    · En qualsevol INSERT/UPDATE/DELETE de tram, Java
 --      recalcula i actualitza llargada_total a la via.
 -- ============================================================
-CREATE TABLE llarg (
-    id_llarg          INT         PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE trams (
+    id_tram           INT         PRIMARY KEY AUTO_INCREMENT,
     -- Exactament una de les tres columnes ha d'estar informada
     id_via_esportiva  INT         DEFAULT NULL,
     id_via_classica   INT         DEFAULT NULL,
     id_via_gel        INT         DEFAULT NULL,
-    -- Numero de tram: L1=1, L2=2... Esportiva sempre 1.
-    num_llarg         INT         NOT NULL CHECK (num_llarg >= 1),
+    -- Numero de tram: T1=1, T2=2... Esportiva sempre 1.
+    num_tram          INT         NOT NULL CHECK (num_tram >= 1),
     -- Rang global 5-30; Java refina: classica/gel mínim 15 m
     llargada          INT         NOT NULL CHECK (llargada BETWEEN 5 AND 30),
     -- Grau del tram; rang maxim segons tipus validat a Java
@@ -225,11 +224,11 @@ CREATE TABLE llarg (
     ),
 
     -- Evita duplicar el mateix tram dins d'una via esportiva
-    UNIQUE (id_via_esportiva, num_llarg),
+    UNIQUE (id_via_esportiva, num_tram),
     -- Evita duplicar el mateix tram dins d'una via classica
-    UNIQUE (id_via_classica,  num_llarg),
+    UNIQUE (id_via_classica,  num_tram),
     -- Evita duplicar el mateix tram dins d'una via gel
-    UNIQUE (id_via_gel,       num_llarg)
+    UNIQUE (id_via_gel,       num_tram)
 );
 
 
@@ -255,7 +254,7 @@ CREATE INDEX idx_vg_datafin ON via_gel       (data_fi_no_apte);
 -- Escaladors amb el mateix nivell maxim
 CREATE INDEX idx_esc_nivell ON escalador     (nivell);
 
--- Llargs per via (consultes frequents des de Java)
-CREATE INDEX idx_llarg_esportiva ON llarg (id_via_esportiva);
-CREATE INDEX idx_llarg_classica  ON llarg (id_via_classica);
-CREATE INDEX idx_llarg_gel       ON llarg (id_via_gel);
+-- Trams per via (consultes frequents des de Java)
+CREATE INDEX idx_trams_esportiva ON trams (id_via_esportiva);
+CREATE INDEX idx_trams_classica  ON trams (id_via_classica);
+CREATE INDEX idx_trams_gel       ON trams (id_via_gel);

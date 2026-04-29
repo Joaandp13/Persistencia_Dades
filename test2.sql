@@ -1,1 +1,4 @@
-USE pillam;
+SELECT * FROM pillam.escola;
+
+
+
