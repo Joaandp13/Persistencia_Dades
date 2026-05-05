@@ -46,7 +46,7 @@ public class Escola {
     public void setPoblacio(String poblacio){
         if(poblacio == null || poblacio.isBlank())
             throw new IllegalArgumentException("El poblacio no estar buit");
-        this.poblacio = poblacio.trim();
+        this.poblacio = poblacio;
     }
 
     public void setAproximacio(String aproximacio) {
