@@ -1,41 +1,39 @@
 package Vista;
+
 import java.util.Scanner;
+
 public class menuPrincipal {
-    public void mostrarMenuPrincipal(){
+    public void mostrar() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("---------------INICI---------------");
-        System.out.println("1. CREAR");
-        System.out.println("2. MODIFICAR");
-        System.out.println("3. LLISTAR");
-        System.out.println("4. ELIMINAR");
-        System.out.println("0. EXIT");
-        System.out.println("INTRODUEIX UNA DE LES OPCIONS");
-        int op= 0;
-        boolean tancar = false;
+        boolean actiu = true;
 
-            op = sc.nextInt();
-            switch (op) {
-                case 1:
-                    menuCrear.menu();
-                    break;
-                case 2:
-                    menuModificar();
-                    break;
-                case 3:
-                    menuLlistar();
-                    break;
-                case 4:
-                    menuEliminar();
-                    break;
-                case 0:
-                    System.out.println("SORTINT...");
+        while (actiu) {
+            System.out.println("\n=======================================");
+            System.out.println("       PILLAM Ltd. Co. - ESCALADA      ");
+            System.out.println("=======================================");
+            System.out.println("1. CREAR");
+            System.out.println("2. MODIFICAR");
+            System.out.println("3. LLISTAR / CONSULTAR");
+            System.out.println("4. ELIMINAR");
+            System.out.println("0. SORTIR");
+            System.out.print("INTRODUEIX UNA DE LES OPCIONS: ");
 
-                    break;
-                default:
-                    System.out.println("Has de introduïr un número entre 0-4.");
-
+            try {
+                int op = Integer.parseInt(sc.nextLine());
+                switch (op) {
+                    case 1 -> menuCrear.menu();
+                    case 2 -> menuModificar.menu();
+                    case 3 -> menuLlistar.menu();
+                    case 4 -> menuEliminar.menu();
+                    case 0 -> {
+                        System.out.println("SORTINT...");
+                        actiu = false;
+                    }
+                    default -> System.out.println("Has d'introduir un numero entre 0-4.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Has d'introduir un numero.");
             }
-            sc.close();
         }
     }
-
+}
