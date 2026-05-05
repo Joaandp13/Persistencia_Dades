@@ -46,7 +46,7 @@ public class Escalador {
 
     // ── Setters ──
     public void setIdEscalador(int idEscalador) {
-        if (idEscalador <= 0)
+        if (idEscalador < 0)
             throw new IllegalArgumentException("L'id no pot ser negativa");
         this.idEscalador = idEscalador;
     }
