@@ -16,6 +16,7 @@ public class crearEscola {
             System.out.print("Poblacio: ");
             String poblacio = sc.nextLine();
             if (poblacio.isBlank()) poblacio = null;
+            else poblacio = poblacio.trim();
 
             System.out.print("Aproximacio (com arribar): ");
             String aproximacio = sc.nextLine();
