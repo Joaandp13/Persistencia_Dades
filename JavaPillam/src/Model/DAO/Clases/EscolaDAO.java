@@ -3,12 +3,9 @@ package Model.DAO.Clases;
 import Model.DAO.DBConnection;
 import Model.Objectes.Escola;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class EscolaDAO {
 
@@ -21,15 +18,15 @@ public class EscolaDAO {
                 rs.getString("popularitat")
         );
     }
-    //CREATE
-    public void inserir(Escola e)throws SQLException {
+
+    // ── CREATE ──
+    public void inserir(Escola e) throws SQLException {
         String sql = """
                 INSERT INTO escola (nom, poblacio, aproximacio, popularitat)
                 VALUES (?, ?, ?, ?)
                 """;
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
             ps.setString(1, e.getNom());
             ps.setString(2, e.getPoblacio());
             ps.setString(3, e.getAproximacio());
@@ -41,34 +38,31 @@ public class EscolaDAO {
         }
     }
 
-    //LLEGIR PER ID
+    // ── READ ONE per id ──
     public Escola cercarPerId(int id) throws SQLException {
         String sql = "SELECT * FROM escola WHERE id_escola = ?";
-
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-
             if (rs.next()) return mapRow(rs);
             return null;
         }
     }
-    //READ ONE per nom
-    public Escola cercarPerNom(String nom) throws SQLException{
-        String sql = "SELECT * FROM escola WHERE nom = ?";
 
-        try (Connection conn = DBConnection.getConnection()){
-            PreparedStatement ps = conn.prepareStatement(sql);
+    // ── READ ONE per nom ──
+    public Escola cercarPerNom(String nom) throws SQLException {
+        String sql = "SELECT * FROM escola WHERE nom = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, nom);
             ResultSet rs = ps.executeQuery();
-
-            if(rs.next())return mapRow(rs);
+            if (rs.next()) return mapRow(rs);
             return null;
         }
     }
 
+    // ── READ ALL ──
     public List<Escola> llistarTotes() throws SQLException {
         List<Escola> llista = new ArrayList<>();
         String sql = "SELECT * FROM escola ORDER BY nom";
@@ -80,7 +74,7 @@ public class EscolaDAO {
         return llista;
     }
 
-    // Compta el total de vies de totes les taules d'una escola
+    // ── Compta el total de vies de totes les taules d'una escola ──
     public int comptarVies(int idEscola) throws SQLException {
         String sql = """
             SELECT
@@ -100,7 +94,7 @@ public class EscolaDAO {
         }
     }
 
-    // Escoles que tenen algun sector amb restriccions
+    // ── Escoles que tenen algun sector amb restriccions ──
     public List<Escola> llistarAmbRestriccions() throws SQLException {
         List<Escola> llista = new ArrayList<>();
         String sql = """
@@ -115,5 +109,32 @@ public class EscolaDAO {
             while (rs.next()) llista.add(mapRow(rs));
         }
         return llista;
+    }
+
+    // ── UPDATE ──
+    public void modificar(Escola e) throws SQLException {
+        String sql = """
+                UPDATE escola SET nom = ?, poblacio = ?, aproximacio = ?, popularitat = ?
+                WHERE id_escola = ?
+                """;
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, e.getNom());
+            ps.setString(2, e.getPoblacio());
+            ps.setString(3, e.getAproximacio());
+            ps.setString(4, e.getPopularitat());
+            ps.setInt(5, e.getIdEscola());
+            ps.executeUpdate();
+        }
+    }
+
+    // ── DELETE ──
+    public void eliminar(int id) throws SQLException {
+        String sql = "DELETE FROM escola WHERE id_escola = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
     }
 }

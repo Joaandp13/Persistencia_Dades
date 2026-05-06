@@ -1,11 +1,7 @@
 package Controller.Vies;
 
-import Model.DAO.Clases.ViaEsportivaDAO;
-import Model.DAO.Clases.ViaClassicaDAO;
-import Model.DAO.Clases.ViaGelDAO;
+import Model.DAO.Clases.Via.*;
 import Model.Objectes.ViaEsportiva;
-import Model.Objectes.ViaClassica;
-import Model.Objectes.ViaGel;
 import java.util.List;
 import java.util.Scanner;
 
