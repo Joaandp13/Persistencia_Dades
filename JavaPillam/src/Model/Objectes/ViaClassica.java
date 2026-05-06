@@ -2,11 +2,11 @@ package Model.Objectes;
 
 import java.time.LocalDate;
 
-public class ViaEsportiva {
+public class ViaClassica {
     private int idVia;
     private String nom;
     private int idSector;
-    private int llargadaTotal;
+    private Integer llargadaTotal; // nullable, Java la calcula sumant trams
     private String grau;
     private String orientacio;
     private String estat;
@@ -18,12 +18,12 @@ public class ViaEsportiva {
     private String restriccions;
 
     // ── Constructors ──
-    public ViaEsportiva() {}
+    public ViaClassica() {}
 
-    public ViaEsportiva(int idVia, String nom, int idSector, int llargadaTotal, String grau,
-                        String orientacio, String estat, LocalDate dataIniciNoApte,
-                        LocalDate dataFiNoApte, String ancoratge, String tipusRoca,
-                        Integer idCreador, String restriccions) {
+    public ViaClassica(int idVia, String nom, int idSector, Integer llargadaTotal, String grau,
+                       String orientacio, String estat, LocalDate dataIniciNoApte,
+                       LocalDate dataFiNoApte, String ancoratge, String tipusRoca,
+                       Integer idCreador, String restriccions) {
         setIdVia(idVia);
         setNom(nom);
         setIdSector(idSector);
@@ -39,14 +39,12 @@ public class ViaEsportiva {
         setRestriccions(restriccions);
     }
 
-    // Constructor sense id
-    public ViaEsportiva(String nom, int idSector, int llargadaTotal, String grau,
-                        String orientacio, String estat, LocalDate dataIniciNoApte,
-                        LocalDate dataFiNoApte, String ancoratge, String tipusRoca,
-                        Integer idCreador, String restriccions) {
+    // Constructor sense id ni llargada (es calcula dels trams)
+    public ViaClassica(String nom, int idSector, String grau, String orientacio, String estat,
+                       LocalDate dataIniciNoApte, LocalDate dataFiNoApte, String ancoratge,
+                       String tipusRoca, Integer idCreador, String restriccions) {
         setNom(nom);
         setIdSector(idSector);
-        setLlargadaTotal(llargadaTotal);
         setGrau(grau);
         setOrientacio(orientacio);
         setDataIniciNoApte(dataIniciNoApte);
@@ -62,7 +60,7 @@ public class ViaEsportiva {
     public int getIdVia()                 { return idVia; }
     public String getNom()                { return nom; }
     public int getIdSector()              { return idSector; }
-    public int getLlargadaTotal()         { return llargadaTotal; }
+    public Integer getLlargadaTotal()     { return llargadaTotal; }
     public String getGrau()               { return grau; }
     public String getOrientacio()         { return orientacio; }
     public String getEstat()              { return estat; }
@@ -86,16 +84,8 @@ public class ViaEsportiva {
         if (idSector <= 0) throw new IllegalArgumentException("El sector no és vàlid");
         this.idSector = idSector;
     }
-    public void setLlargadaTotal(int llargadaTotal) {
-        if (llargadaTotal < 5 || llargadaTotal > 30)
-            throw new IllegalArgumentException("La llargada ha de ser entre 5 i 30m");
-        this.llargadaTotal = llargadaTotal;
-    }
-    public void setGrau(String grau) {
-        if (grau != null && !grau.matches("^[4-9][abc]?[+]?$"))
-            throw new IllegalArgumentException("Grau invàlid: " + grau);
-        this.grau = grau;
-    }
+    public void setLlargadaTotal(Integer llargadaTotal) { this.llargadaTotal = llargadaTotal; }
+    public void setGrau(String grau)                    { this.grau          = grau; }
     public void setOrientacio(String orientacio) {
         if (orientacio != null && !orientacio.matches("^(N|NE|NO|E|O|SE|SO|S)$"))
             throw new IllegalArgumentException("Orientació invàlida: " + orientacio);
@@ -112,33 +102,37 @@ public class ViaEsportiva {
     }
     public void setAncoratge(String ancoratge) {
         if (ancoratge != null &&
-                !ancoratge.equals("spits") && !ancoratge.equals("parabolts") && !ancoratge.equals("quimics"))
-            throw new IllegalArgumentException("Ancoratge invàlid per via esportiva: " + ancoratge);
+            !ancoratge.equals("friends") && !ancoratge.equals("tascons") &&
+            !ancoratge.equals("bagues")  && !ancoratge.equals("pitons") &&
+            !ancoratge.equals("tricams") && !ancoratge.equals("bigbros") &&
+            !ancoratge.equals("spits")   && !ancoratge.equals("parabolts") &&
+            !ancoratge.equals("quimics"))
+            throw new IllegalArgumentException("Ancoratge invàlid per via clàssica: " + ancoratge);
         this.ancoratge = ancoratge;
     }
     public void setTipusRoca(String tipusRoca) {
         if (tipusRoca != null &&
-                !tipusRoca.equals("conglomerat") && !tipusRoca.equals("granit") &&
-                !tipusRoca.equals("calcaria")    && !tipusRoca.equals("arenisca") &&
-                !tipusRoca.equals("altres"))
+            !tipusRoca.equals("conglomerat") && !tipusRoca.equals("granit") &&
+            !tipusRoca.equals("calcaria")    && !tipusRoca.equals("arenisca") &&
+            !tipusRoca.equals("altres"))
             throw new IllegalArgumentException("Tipus de roca invàlid: " + tipusRoca);
         this.tipusRoca = tipusRoca;
     }
-    public void setIdCreador(Integer idCreador)      { this.idCreador   = idCreador; }
+    public void setIdCreador(Integer idCreador)      { this.idCreador    = idCreador; }
     public void setRestriccions(String restriccions) { this.restriccions = restriccions; }
 
     @Override
     public String toString() {
-        return "ViaEsportiva {" +
-                "\n  id         = " + idVia +
-                "\n  nom        = " + nom +
-                "\n  sector     = " + idSector +
-                "\n  llargada   = " + llargadaTotal + "m" +
-                "\n  grau       = " + grau +
-                "\n  orientacio = " + orientacio +
-                "\n  estat      = " + estat +
-                "\n  ancoratge  = " + ancoratge +
-                "\n  roca       = " + tipusRoca +
-                "\n}";
+        return "ViaClassica {" +
+               "\n  id         = " + idVia +
+               "\n  nom        = " + nom +
+               "\n  sector     = " + idSector +
+               "\n  llargada   = " + (llargadaTotal != null ? llargadaTotal + "m" : "pendent") +
+               "\n  grau       = " + grau +
+               "\n  orientacio = " + orientacio +
+               "\n  estat      = " + estat +
+               "\n  ancoratge  = " + ancoratge +
+               "\n  roca       = " + tipusRoca +
+               "\n}";
     }
 }
