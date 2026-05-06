@@ -25,7 +25,7 @@ public class menuModificar {
                     modificarEscalador.modificarEsc();
                     break;
                 case 2:
-                    //modificarEscola.modificarEsco();
+                    modificarEscola.modificarEsco();
                     break;
                 case 3:
                     //modificarSector.modificarSect();
