@@ -1,14 +1,13 @@
 package Vista;
-import java.util.Scanner;
 
-import Controller.Escalador.*;
-import Controller.Escola.*;
-import Controller.Sector.*;
-import Controller.Vies.*;
+import Controller.Escalador.eliminarEscalador;
+import Controller.Escola.eliminarEscola;
+import Controller.Sector.eliminarSector;
+import Controller.Vies.eliminarVies;
+import java.util.Scanner;
 
 public class menuEliminar {
     public static void menu() {
-
         Scanner sc = new Scanner(System.in);
         System.out.println("---------------ELIMINAR---------------");
         System.out.println("1. ESCALADOR");
@@ -16,28 +15,21 @@ public class menuEliminar {
         System.out.println("3. SECTOR");
         System.out.println("4. VIES");
         System.out.println("0. TORNAR");
-        System.out.println("INTRODUEIX UNA DE LES OPCIONS");
+        System.out.print("INTRODUEIX UNA DE LES OPCIONS: ");
         try {
-            int op = sc.nextInt();
-
+            int op = Integer.parseInt(sc.nextLine());
             switch (op) {
-                case 1:
-                    eliminarEscalador.eliminarEsc();
-                    break;
-                case 2:
-                    //eliminarEscola.eliminarEsco();
-                    break;
-                case 3:
-                   // eliminarSector.eliminarSect();
-                    break;
-                case 4:
-                   // eliminarVies.eliminarVie();
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("HAS D'INTRODUÏR UN NÚMERO ENTRE 0-4.");
+                case 1 -> eliminarEscalador.eliminarEsc();
+                case 2 -> eliminarEscola.eliminarEsco();
+                case 3 -> eliminarSector.eliminarSect();
+                case 4 -> eliminarVies.eliminarVie();
+                case 0 -> {}
+                default -> System.out.println("HAS D'INTRODUIR UN NUMERO ENTRE 0-4.");
             }
-        } catch (Exception e) { System.out.println("Error: " + e.getMessage()); }
+        } catch (NumberFormatException e) {
+            System.out.println("Has d'introduir un numero.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 }
