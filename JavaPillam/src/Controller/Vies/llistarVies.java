@@ -1,7 +1,7 @@
 package Controller.Vies;
 
 import Model.DAO.Clases.Via.*;
-import Model.Objectes.ViaEsportiva;
+import Model.Objectes.*;
 import java.util.List;
 import java.util.Scanner;
 
@@ -56,13 +56,15 @@ public class llistarVies {
             System.out.println("--- CLASSIQUES ---");
             new ViaClassicaDAO().llistarTotes().forEach(v ->
                 System.out.println("  [" + v.getIdVia() + "] " + v.getNom()
-                    + " [" + v.getGrau() + "] " + v.getLlargadaTotal() + "m"
+                    + " [" + v.getGrau() + "] "
+                    + (v.getLlargadaTotal() != null ? v.getLlargadaTotal() + "m" : "pendent")
                     + " | " + v.getEstat()));
 
             System.out.println("--- GEL ---");
             new ViaGelDAO().llistarTotes().forEach(v ->
                 System.out.println("  [" + v.getIdVia() + "] " + v.getNom()
-                    + " [" + v.getGrau() + "] " + v.getLlargadaTotal() + "m"
+                    + " [" + v.getGrau() + "] "
+                    + (v.getLlargadaTotal() != null ? v.getLlargadaTotal() + "m" : "pendent")
                     + " | " + v.getEstat()));
 
         } catch (Exception ex) {
@@ -80,7 +82,7 @@ public class llistarVies {
             int idEscola = Integer.parseInt(sc.nextLine());
 
             System.out.println("--- ESPORTIVES ---");
-            List<ViaEsportiva> esportives = new ViaEsportivaDAO().llistarPerEscola(idEscola);
+            List<ViaEsportiva> esportives = new ViaEsportivaDAO().llistarAptesPerEscola(idEscola);
             if (esportives.isEmpty()) System.out.println("  Cap via esportiva disponible.");
             else esportives.forEach(v ->
                 System.out.println("  [" + v.getIdVia() + "] " + v.getNom()
@@ -88,18 +90,20 @@ public class llistarVies {
                     + " | Sector: " + v.getIdSector()));
 
             System.out.println("--- CLASSIQUES ---");
-            List<ViaClassica> classiques = new ViaClassicaDAO().llistarPerEstat("apte");
+            List<ViaClassica> classiques = new ViaClassicaDAO().llistarAptesPerEscola(idEscola);
             if (classiques.isEmpty()) System.out.println("  Cap via classica disponible.");
             else classiques.forEach(v ->
                 System.out.println("  [" + v.getIdVia() + "] " + v.getNom()
-                    + " [" + v.getGrau() + "] " + v.getLlargadaTotal() + "m"));
+                    + " [" + v.getGrau() + "] "
+                    + (v.getLlargadaTotal() != null ? v.getLlargadaTotal() + "m" : "pendent")));
 
             System.out.println("--- GEL ---");
-            List<ViaGel> gels = new ViaGelDAO().llistarPerEstat("apte");
+            List<ViaGel> gels = new ViaGelDAO().llistarAptesPerEscola(idEscola);
             if (gels.isEmpty()) System.out.println("  Cap via gel disponible.");
             else gels.forEach(v ->
                 System.out.println("  [" + v.getIdVia() + "] " + v.getNom()
-                    + " [" + v.getGrau() + "] " + v.getLlargadaTotal() + "m"));
+                    + " [" + v.getGrau() + "] "
+                    + (v.getLlargadaTotal() != null ? v.getLlargadaTotal() + "m" : "pendent")));
 
         } catch (NumberFormatException ex) {
             System.out.println("Has d'introduir un numero.");
@@ -120,21 +124,21 @@ public class llistarVies {
 
             if (tipus.equals("esportiva") || tipus.equals("tots")) {
                 System.out.println("--- ESPORTIVES ---");
-                new ViaEsportivaDAO().cercarPerRangGrau(min, max).forEach(v ->
+                new ViaEsportivaDAO().llistarPerRangGrau(min, max).forEach(v ->
                     System.out.println("  " + v.getNom()
                         + " [" + v.getGrau() + "]"
                         + " | Sector: " + v.getIdSector()));
             }
             if (tipus.equals("classica") || tipus.equals("tots")) {
                 System.out.println("--- CLASSIQUES ---");
-                new ViaClassicaDAO().cercarPerRangGrau(min, max).forEach(v ->
+                new ViaClassicaDAO().llistarPerRangGrau(min, max).forEach(v ->
                     System.out.println("  " + v.getNom()
                         + " [" + v.getGrau() + "]"
                         + " | Sector: " + v.getIdSector()));
             }
             if (tipus.equals("gel") || tipus.equals("tots")) {
                 System.out.println("--- GEL ---");
-                new ViaGelDAO().cercarPerRangGrau(min, max).forEach(v ->
+                new ViaGelDAO().llistarPerRangGrau(min, max).forEach(v ->
                     System.out.println("  " + v.getNom()
                         + " [" + v.getGrau() + "]"
                         + " | Sector: " + v.getIdSector()));
@@ -181,12 +185,24 @@ public class llistarVies {
     public static void viesRecentmentAptes() {
         System.out.println("----------- VIES RECENTMENT TORNADES A APTE -----------");
         try {
-            List<ViaEsportiva> llista = new ViaEsportivaDAO().llistarRecentmentAptes();
-            if (llista.isEmpty()) { System.out.println("Cap via recentment tornada a apte."); return; }
-            for (ViaEsportiva v : llista)
+            System.out.println("--- ESPORTIVES ---");
+            new ViaEsportivaDAO().llistarRecentmentAptes().forEach(v ->
                 System.out.println("  [" + v.getIdVia() + "] " + v.getNom()
                     + " [" + v.getGrau() + "]"
-                    + " | Fi tancament: " + v.getDataFiNoApte());
+                    + " | Fi tancament: " + v.getDataFiNoApte()));
+
+            System.out.println("--- CLASSIQUES ---");
+            new ViaClassicaDAO().llistarRecentmentAptes().forEach(v ->
+                System.out.println("  [" + v.getIdVia() + "] " + v.getNom()
+                    + " [" + v.getGrau() + "]"
+                    + " | Fi tancament: " + v.getDataFiNoApte()));
+
+            System.out.println("--- GEL ---");
+            new ViaGelDAO().llistarRecentmentAptes().forEach(v ->
+                System.out.println("  [" + v.getIdVia() + "] " + v.getNom()
+                    + " [" + v.getGrau() + "]"
+                    + " | Fi tancament: " + v.getDataFiNoApte()));
+
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
@@ -201,12 +217,23 @@ public class llistarVies {
             System.out.print("ID de l'escola: ");
             int idEscola = Integer.parseInt(sc.nextLine());
 
-            List<ViaEsportiva> llista = new ViaEsportivaDAO().llistarMesLlarguesPerEscola(idEscola);
-            if (llista.isEmpty()) { System.out.println("Cap via trobada."); return; }
-            for (ViaEsportiva v : llista)
+            System.out.println("--- ESPORTIVES ---");
+            new ViaEsportivaDAO().llistarMesLlarguesPerEscola(idEscola).forEach(v ->
                 System.out.println("  " + v.getNom()
                     + " - " + v.getLlargadaTotal() + "m"
-                    + " [" + v.getGrau() + "]");
+                    + " [" + v.getGrau() + "]"));
+
+            System.out.println("--- CLASSIQUES ---");
+            new ViaClassicaDAO().llistarMesLlarguesPerEscola(idEscola).forEach(v ->
+                System.out.println("  " + v.getNom()
+                    + " - " + (v.getLlargadaTotal() != null ? v.getLlargadaTotal() + "m" : "pendent")
+                    + " [" + v.getGrau() + "]"));
+
+            System.out.println("--- GEL ---");
+            new ViaGelDAO().llistarMesLlarguesPerEscola(idEscola).forEach(v ->
+                System.out.println("  " + v.getNom()
+                    + " - " + (v.getLlargadaTotal() != null ? v.getLlargadaTotal() + "m" : "pendent")
+                    + " [" + v.getGrau() + "]"));
 
         } catch (NumberFormatException ex) {
             System.out.println("Has d'introduir un numero.");

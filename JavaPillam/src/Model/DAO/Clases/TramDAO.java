@@ -8,6 +8,8 @@ import java.util.List;
 
 public class TramDAO {
 
+    // Nota: la columna a la BDD es "id_via_classica" (doble s)
+    // pero el camp al model es "idViaClasica" (una s) - adaptem aqui
     private Tram mapRow(ResultSet rs) throws SQLException {
         int vc = rs.getInt("id_via_classica"); Integer idVc = rs.wasNull() ? null : vc;
         int ve = rs.getInt("id_via_esportiva"); Integer idVe = rs.wasNull() ? null : ve;
@@ -27,9 +29,10 @@ public class TramDAO {
         Connection conn = DBConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-        if (t.getIdViaClasica()    != null) ps.setInt(1, t.getIdViaClasica());    else ps.setNull(1, Types.INTEGER);
-        if (t.getIdViaEsportiva()  != null) ps.setInt(2, t.getIdViaEsportiva());  else ps.setNull(2, Types.INTEGER);
-        if (t.getIdViaGel()        != null) ps.setInt(3, t.getIdViaGel());        else ps.setNull(3, Types.INTEGER);
+        // getIdViaClasica() -> columna id_via_classica
+        if (t.getIdViaClasica()   != null) ps.setInt(1, t.getIdViaClasica());   else ps.setNull(1, Types.INTEGER);
+        if (t.getIdViaEsportiva() != null) ps.setInt(2, t.getIdViaEsportiva()); else ps.setNull(2, Types.INTEGER);
+        if (t.getIdViaGel()       != null) ps.setInt(3, t.getIdViaGel());       else ps.setNull(3, Types.INTEGER);
         ps.setInt(4, t.getNumTram());
         ps.setInt(5, t.getLlargada());
         ps.setString(6, t.getGrau());
@@ -38,6 +41,18 @@ public class TramDAO {
         ResultSet keys = ps.getGeneratedKeys();
         if (keys.next()) t.setIdTram(keys.getInt(1));
         ps.close();
+    }
+
+    // ── READ ONE ──
+    public Tram cercarPerId(int id) throws SQLException {
+        String sql = "SELECT * FROM trams WHERE id_tram = ?";
+        Connection conn = DBConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        Tram t = rs.next() ? mapRow(rs) : null;
+        ps.close();
+        return t;
     }
 
     // ── READ per via esportiva ──
@@ -65,6 +80,21 @@ public class TramDAO {
         while (rs.next()) llista.add(mapRow(rs));
         ps.close();
         return llista;
+    }
+
+    // ── UPDATE ──
+    public void modificar(Tram t) throws SQLException {
+        String sql = """
+                UPDATE trams SET llargada = ?, grau = ?
+                WHERE id_tram = ?
+                """;
+        Connection conn = DBConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, t.getLlargada());
+        ps.setString(2, t.getGrau());
+        ps.setInt(3, t.getIdTram());
+        ps.executeUpdate();
+        ps.close();
     }
 
     // ── DELETE ──
