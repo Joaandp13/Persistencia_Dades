@@ -2,6 +2,8 @@ package Controller.Sector;
 
 import Model.DAO.Clases.SectorDAO;
 import Model.Objectes.Sector;
+import Vista.Utils;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -42,6 +44,7 @@ public class llistarSector {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     // Consulta especifica: sectors amb mes de X vies disponibles
@@ -62,5 +65,6 @@ public class llistarSector {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 }

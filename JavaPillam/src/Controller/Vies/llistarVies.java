@@ -2,6 +2,8 @@ package Controller.Vies;
 
 import Model.DAO.Clases.Via.*;
 import Model.Objectes.*;
+import Vista.Utils;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -42,6 +44,7 @@ public class llistarVies {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     public static void llistarTotes() {
@@ -70,6 +73,7 @@ public class llistarVies {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     // ── Consulta 1: vies disponibles (apte) d'una escola ─────
@@ -110,6 +114,7 @@ public class llistarVies {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     // ── Consulta 2: cercar per rang de dificultat ─────────────
@@ -146,6 +151,7 @@ public class llistarVies {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     // ── Consulta 3: cercar per estat ──────────────────────────
@@ -178,6 +184,7 @@ public class llistarVies {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     // ── Consulta 4: vies recentment tornades a apte ───────────
@@ -206,6 +213,7 @@ public class llistarVies {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     // ── Consulta 5: vies mes llargues d'una escola ────────────
@@ -240,5 +248,6 @@ public class llistarVies {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 }

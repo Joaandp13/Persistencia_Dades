@@ -4,6 +4,7 @@ import Model.DAO.Clases.EscolaDAO;
 import Model.Objectes.Escola;
 import java.util.List;
 import java.util.Scanner;
+import Vista.Utils;
 
 public class llistarEscola {
 
@@ -27,6 +28,7 @@ public class llistarEscola {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     public static void llistarTotes() {
@@ -43,6 +45,7 @@ public class llistarEscola {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     // Consulta especifica: escoles amb restriccions actives
@@ -58,5 +61,6 @@ public class llistarEscola {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 }

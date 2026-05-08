@@ -4,6 +4,7 @@ import Model.DAO.Clases.EscaladorDAO;
 import Model.Objectes.Escalador;
 import java.util.List;
 import java.util.Scanner;
+import Vista.Utils;
 
 public class llistarEscalador {
 
@@ -25,6 +26,7 @@ public class llistarEscalador {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     public static void llistarTots() {
@@ -41,6 +43,7 @@ public class llistarEscalador {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     // Consulta especifica: escaladors amb el mateix nivell maxim
@@ -60,5 +63,6 @@ public class llistarEscalador {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 }

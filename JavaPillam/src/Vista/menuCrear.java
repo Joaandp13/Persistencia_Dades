@@ -30,7 +30,7 @@ public class menuCrear {
                 crearSector.crearSect();
                 break;
             case 4:
-                crearVies.crearVie();
+                menuVies.menu();
                 break;
             case 0:
                 break;
