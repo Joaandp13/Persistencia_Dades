@@ -83,8 +83,14 @@ public class Tram {
     }
 
     public void setLlargada(int llargada) {
-        if (llargada < 15 || llargada > 30) {
-            throw new IllegalArgumentException("La llargada del tram ha d'estar entre 15 i 30 metres");
+        if (idViaEsportiva != null) {
+            // Esportiva: 5-30m
+            if (llargada < 5 || llargada > 30)
+                throw new IllegalArgumentException("La llargada del tram esportiu ha d'estar entre 5 i 30 metres");
+        } else {
+            // Classica / Gel: 15-30m
+            if (llargada < 15 || llargada > 30)
+                throw new IllegalArgumentException("La llargada del tram ha d'estar entre 15 i 30 metres");
         }
         this.llargada = llargada;
     }
@@ -99,7 +105,7 @@ public class Tram {
     // ==================== VALIDACIÓ ====================
 
     /**
-     * Assegura que només UNA de les tres FK estigui informada (no null).
+     * Assegura que només UNA de les tres FK estigui hablitiada (no null).
      * Les altres dues han de ser obligatòriament null.
      */
     private void validarUnicTipusVia() {
