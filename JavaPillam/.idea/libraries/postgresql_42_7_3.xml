@@ -1,9 +1,22 @@
+<!-- Definició del component que gestiona les llibreries del projecte -->
 <component name="libraryTable">
+  
+  <!-- Declaració de la llibreria PostgreSQL JDBC Driver versió 42.7.3 -->
   <library name="postgresql-42.7.3">
+    
+    <!-- Secció on es defineixen les classes de la llibreria -->
     <CLASSES>
+      
+      <!-- Ruta al fitxer JAR del driver PostgreSQL -->
       <root url="jar://$USER_HOME$/Downloads/postgresql-42.7.3.jar!/" />
+    
     </CLASSES>
+    
+    <!-- Espai reservat per a la documentació JavaDoc (actualment no definida) -->
     <JAVADOC />
+    
+    <!-- Espai reservat per al codi font de la llibreria (actualment no definit) -->
     <SOURCES />
+  
   </library>
 </component>
