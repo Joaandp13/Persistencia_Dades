@@ -1,10 +1,29 @@
+# Secció principal de fitxers i directoris ignorats per defecte per l'entorn (IDE)
 # Default ignored files
+
+# Directori utilitzat per desar temporalment canvis de codi (shelve) sense fer-ne commit
 /shelf/
+
+# Fitxer que desa la configuració local i l'estat de l'espai de treball de l'usuari (finestres obertes, etc.)
 /workspace.xml
+
+# Secció per ignorar la carpeta per defecte que conté els fitxers de consultes
 # Ignored default folder with query files
+
+# Directori on s'emmagatzemen els scripts i les consultes a bases de dades de l'usuari
 /queries/
+
+# Secció per als arxius d'emmagatzematge local relacionats amb les fonts de dades
 # Datasource local storage ignored files
+
+# Directori que desa les dades internes i catàlegs de les connexions a bases de dades
 /dataSources/
+
+# Fitxer XML que conté les configuracions, propietats locals o estats personals de connexió a les fonts de dades
 /dataSources.local.xml
+
+# Secció de fitxers generats pel client HTTP integrat a l'editor
 # Editor-based HTTP Client requests
+
+# Directori on es desen les sol·licituds i l'historial de proves d'APIs o peticions REST realitzades
 /httpRequests/
