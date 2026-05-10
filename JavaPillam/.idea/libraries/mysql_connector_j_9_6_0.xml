@@ -1,9 +1,22 @@
+<!-- Definició d'un component anomenat "libraryTable" -->
 <component name="libraryTable">
+  
+  <!-- Declaració de la llibreria MySQL Connector/J versió 9.6.0 -->
   <library name="mysql-connector-j-9.6.0">
+    
+    <!-- Secció que conté les classes de la llibreria -->
     <CLASSES>
+      
+      <!-- Ruta al fitxer JAR del connector MySQL -->
       <root url="jar://$PROJECT_DIR$/../mysql-connector-j-9.6.0/mysql-connector-j-9.6.0.jar!/" />
+    
     </CLASSES>
+    
+    <!-- Espai reservat per a la documentació JavaDoc (actualment buit) -->
     <JAVADOC />
+    
+    <!-- Espai reservat per al codi font de la llibreria (actualment buit) -->
     <SOURCES />
+  
   </library>
 </component>
