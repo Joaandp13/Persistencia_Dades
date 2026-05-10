@@ -1,22 +1,9 @@
-<!-- Component que conté la taula de llibreries del projecte -->
 <component name="libraryTable">
-  
-  <!-- Declaració de la llibreria SLF4J API versió 2.0.13 -->
-  <library name="slf4j-api-2.0.13">
-    
-    <!-- Secció que defineix les classes disponibles de la llibreria -->
-    <CLASSES>
-      
-      <!-- Ruta al fitxer JAR de la llibreria SLF4J -->
-      <root url="jar://$USER_HOME$/Downloads/slf4j-api-2.0.13.jar!/" />
-    
-    </CLASSES>
-    
-    <!-- Espai reservat per a la documentació JavaDoc -->
-    <JAVADOC />
-    
-    <!-- Espai reservat per al codi font de la llibreria -->
-    <SOURCES />
-  
-  </library>
+  <library name="slf4j-api-2.0.13">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/slf4j-api-2.0.13.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
 </component>
