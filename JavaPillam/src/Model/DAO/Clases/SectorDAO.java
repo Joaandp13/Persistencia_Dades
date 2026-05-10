@@ -1,3 +1,4 @@
+// Defineix el paquet per a la persistència de dades mitjançant el patró DAO.
 package Model.DAO.Clases;
 
 import Model.DAO.DBConnection;
@@ -6,8 +7,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SectorDAO: Implementa les operacions d'accés a la base de dades (CRUD)
+ * per a la taula 'sector'.
+ */
 public class SectorDAO {
 
+    /**
+     * Mètode privat de suport que mapeja una fila de la base de dades (ResultSet)
+     * a un objecte Java de la classe 'Sector'.
+     */
     private Sector mapRow(ResultSet rs) throws SQLException {
         Sector s = new Sector();
         s.setIdSector(rs.getInt("id_sector"));
@@ -22,12 +31,17 @@ public class SectorDAO {
         return s;
     }
 
-    // ── CREATE ──
+    // ── CREATE (Inserir) ──
+    /**
+     * Insereix un nou sector a la base de dades.
+     * Utilitza Statement.RETURN_GENERATED_KEYS per recuperar l'ID autoincremental generat.
+     */
     public void inserir(Sector s) throws SQLException {
         String sql = """
                 INSERT INTO sector (nom, id_escola, latitud, longitud, aproximacio, popularitat, restriccions, tipus_vies)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """;
+        // try-with-resources: garanteix el tancament de la connexió i el PreparedStatement automàticament.
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, s.getNom());
@@ -40,24 +54,32 @@ public class SectorDAO {
             ps.setString(8, s.getTipusVies());
             ps.executeUpdate();
 
+            // Recupera la clau primària (ID) que la BDD ha assignat al nou registre.
             ResultSet keys = ps.getGeneratedKeys();
             if (keys.next()) s.setIdSector(keys.getInt(1));
         }
     }
 
-    // ── READ ONE ──
+    // ── READ ONE (Cercar per ID) ──
+    /**
+     * Obté un sector concret mitjançant el seu identificador únic.
+     */
     public Sector cercarPerId(int id) throws SQLException {
         String sql = "SELECT * FROM sector WHERE id_sector = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
+            // Si hi ha un resultat, el mapegem a un objecte; si no, retornem null.
             if (rs.next()) return mapRow(rs);
             return null;
         }
     }
 
-    // ── READ ALL ──
+    // ── READ ALL (Llistar tots) ──
+    /**
+     * Retorna una llista amb tots els sectors de la base de dades, ordenats alfabèticament.
+     */
     public List<Sector> llistarTots() throws SQLException {
         List<Sector> llista = new ArrayList<>();
         String sql = "SELECT * FROM sector ORDER BY nom";
@@ -69,7 +91,10 @@ public class SectorDAO {
         return llista;
     }
 
-    // ── READ per escola ──
+    // ── READ PER ESCOLA ──
+    /**
+     * Filtra els sectors segons l'escola a la qual pertanyen (relació 1:N).
+     */
     public List<Sector> llistarPerEscola(int idEscola) throws SQLException {
         List<Sector> llista = new ArrayList<>();
         String sql = "SELECT * FROM sector WHERE id_escola = ? ORDER BY nom";
@@ -82,7 +107,11 @@ public class SectorDAO {
         return llista;
     }
 
-    // ── READ sectors amb més de X vies disponibles ──
+    // ── READ COMPLEX (Lògica de negoci) ──
+    /**
+     * Busca sectors que tinguin més de X vies amb l'estat 'apte'.
+     * Aquest mètode suma el recompte de les tres taules de vies (esportiva, clàssica i gel).
+     */
     public List<Sector> llistarAmbMesDeXVies(int x) throws SQLException {
         List<Sector> llista = new ArrayList<>();
         String sql = """
@@ -103,7 +132,10 @@ public class SectorDAO {
         return llista;
     }
 
-    // ── UPDATE ──
+    // ── UPDATE (Modificar) ──
+    /**
+     * Actualitza tots els camps d'un sector existent basant-se en el seu ID.
+     */
     public void modificar(Sector s) throws SQLException {
         String sql = """
                 UPDATE sector SET nom=?, id_escola=?, latitud=?, longitud=?,
@@ -125,7 +157,10 @@ public class SectorDAO {
         }
     }
 
-    // ── DELETE ──
+    // ── DELETE (Eliminar) ──
+    /**
+     * Elimina el registre d'un sector mitjançant el seu ID.
+     */
     public void eliminar(int id) throws SQLException {
         String sql = "DELETE FROM sector WHERE id_sector = ?";
         try (Connection conn = DBConnection.getConnection();
