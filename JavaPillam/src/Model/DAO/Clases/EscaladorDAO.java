@@ -1,3 +1,4 @@
+// Defineix el paquet per a la persistència de dades dels Escaladors.
 package Model.DAO.Clases;
 
 import Model.DAO.DBConnection;
@@ -6,10 +7,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * EscaladorDAO: Centralitza totes les operacions de lectura i escriptura 
+ * a la taula 'escalador' de la base de dades.
+ */
 public class EscaladorDAO {
 
-    // ── Mapeig ResultSet -> Escalador ──────────────────────────────────────
-    // Mètode privat reutilitzat per tots els mètodes de lectura
+    /**
+     * Mètode privat auxiliar per transformar una fila del ResultSet en un objecte Java 'Escalador'.
+     * Reutilitzat per tots els mètodes de consulta (Read) per evitar duplicitat de codi.
+     */
     private Escalador mapRow(ResultSet rs) throws SQLException {
         return new Escalador(
                 rs.getInt("id_escalador"),
@@ -23,7 +30,11 @@ public class EscaladorDAO {
         );
     }
 
-    // ── CREATE ─────────────────────────────────────────────────────────────
+    // ── CREATE (Inserir) ──
+    /**
+     * Registra un nou escalador al sistema. 
+     * Utilitza RETURN_GENERATED_KEYS per actualitzar l'ID de l'objecte amb el valor creat per la BDD.
+     */
     public void inserir(Escalador e) throws SQLException {
         String sql = """
                 INSERT INTO escalador (nom, alias, edat, nivell, via_max_nivell, estil_preferit, historial)
@@ -42,7 +53,7 @@ public class EscaladorDAO {
             ps.setString(7, e.getHistorial());
             ps.executeUpdate();
 
-            // Recupera l'id generat per MySQL i l'assigna a l'objecte
+            // Sincronitza l'ID generat per la base de dades amb l'objecte en memòria.
             ResultSet keys = ps.getGeneratedKeys();
             if (keys.next()) {
                 e.setIdEscalador(keys.getInt(1));
@@ -50,7 +61,9 @@ public class EscaladorDAO {
         }
     }
 
-    // ── READ ONE per id ────────────────────────────────────────────────────
+    // ── READ ONE (Cerca Individual) ──
+
+    /** Cerca un escalador pel seu ID únic. */
     public Escalador cercarPerId(int id) throws SQLException {
         String sql = "SELECT * FROM escalador WHERE id_escalador = ?";
 
@@ -61,12 +74,11 @@ public class EscaladorDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) return mapRow(rs);
-            return null; // no trobat
+            return null; // Retorna null si no existeix cap escalador amb aquest ID.
         }
     }
 
-    // ── READ ONE per nom ───────────────────────────────────────────────────
-    // Útil per comprovar si el creador d'una via existeix
+    /** Cerca un escalador pel seu nom complet. */
     public Escalador cercarPerNom(String nom) throws SQLException {
         String sql = "SELECT * FROM escalador WHERE nom = ?";
 
@@ -81,7 +93,9 @@ public class EscaladorDAO {
         }
     }
 
-    // ── READ ALL ───────────────────────────────────────────────────────────
+    // ── READ ALL (Llistats) ──
+
+    /** Retorna la llista completa de tots els escaladors registrats. */
     public List<Escalador> llistarTots() throws SQLException {
         List<Escalador> llista = new ArrayList<>();
         String sql = "SELECT * FROM escalador";
@@ -97,8 +111,9 @@ public class EscaladorDAO {
         return llista;
     }
 
-    // ── READ ALL amb mateix nivell màxim ───────────────────────────────────
-    // Cas específic de l'enunciat
+    /** * Retorna els escaladors que tenen un nivell tècnic específic (ex: '6a', '7b+').
+     * Molt útil per trobar companys de cordada del mateix nivell.
+     */
     public List<Escalador> llistarPerNivell(String nivell) throws SQLException {
         List<Escalador> llista = new ArrayList<>();
         String sql = "SELECT * FROM escalador WHERE nivell = ?";
@@ -116,7 +131,10 @@ public class EscaladorDAO {
         return llista;
     }
 
-    // ── UPDATE ─────────────────────────────────────────────────────────────
+    // ── UPDATE (Modificar) ──
+    /**
+     * Sobreescriu les dades d'un escalador existent utilitzant el seu ID com a referència.
+     */
     public void modificar(Escalador e) throws SQLException {
         String sql = """
                 UPDATE escalador
@@ -140,7 +158,10 @@ public class EscaladorDAO {
         }
     }
 
-    // ── DELETE ─────────────────────────────────────────────────────────────
+    // ── DELETE (Eliminar) ──
+    /**
+     * Elimina un escalador de la base de dades.
+     */
     public void eliminar(int id) throws SQLException {
         String sql = "DELETE FROM escalador WHERE id_escalador = ?";
 
