@@ -1,22 +1,9 @@
-<!-- Definició d'un component anomenat "libraryTable" -->
 <component name="libraryTable">
-  
-  <!-- Declaració d'una llibreria externa anomenada HikariCP versió 5.1.0 -->
-  <library name="HikariCP-5.1.0">
-    
-    <!-- Secció on es defineixen les classes disponibles de la llibreria -->
-    <CLASSES>
-      
-      <!-- Ruta al fitxer JAR de la llibreria HikariCP -->
-      <root url="jar://$USER_HOME$/Downloads/HikariCP-5.1.0.jar!/" />
-    
-    </CLASSES>
-    
-    <!-- Espai reservat per a la documentació JavaDoc (actualment buit) -->
-    <JAVADOC />
-    
-    <!-- Espai reservat per al codi font de la llibreria (actualment buit) -->
-    <SOURCES />
-  
-  </library>
+  <library name="HikariCP-5.1.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/HikariCP-5.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
 </component>
