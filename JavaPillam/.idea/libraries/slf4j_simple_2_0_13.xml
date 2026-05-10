@@ -1,22 +1,9 @@
-<!-- Component que gestiona la configuració de llibreries del projecte -->
 <component name="libraryTable">
-  
-  <!-- Declaració de la llibreria SLF4J Simple versió 2.0.13 -->
-  <library name="slf4j-simple-2.0.13">
-    
-    <!-- Secció que conté les classes de la llibreria -->
-    <CLASSES>
-      
-      <!-- Ruta al fitxer JAR de la implementació simple de SLF4J -->
-      <root url="jar://$USER_HOME$/Downloads/slf4j-simple-2.0.13.jar!/" />
-    
-    </CLASSES>
-    
-    <!-- Espai reservat per a la documentació JavaDoc -->
-    <JAVADOC />
-    
-    <!-- Espai reservat per al codi font de la llibreria -->
-    <SOURCES />
-  
-  </library>
+  <library name="slf4j-simple-2.0.13">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/slf4j-simple-2.0.13.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
 </component>
