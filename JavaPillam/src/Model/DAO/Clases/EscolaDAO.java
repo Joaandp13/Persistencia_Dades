@@ -1,14 +1,21 @@
+// Defineix el paquet per a la persistència de dades de l'Escola.
 package Model.DAO.Clases;
 
 import Model.DAO.DBConnection;
 import Model.Objectes.Escola;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * EscolaDAO: Gestiona el cicle de vida de les dades de les Escoles d'escalada.
+ * A part del CRUD bàsic, inclou lògica per comptabilitzar vies i filtrar per restriccions.
+ */
 public class EscolaDAO {
 
+    /**
+     * Mètode privat per convertir un registre de la base de dades en un objecte Escola.
+     */
     private Escola mapRow(ResultSet rs) throws SQLException {
         return new Escola(
                 rs.getInt("id_escola"),
@@ -19,7 +26,11 @@ public class EscolaDAO {
         );
     }
 
-    // ── CREATE ──
+    // ── CREATE (Inserir) ──
+    /**
+     * Guarda una nova escola. Recupera l'ID generat pel motor de la BDD
+     * i l'assigna a l'objecte Java.
+     */
     public void inserir(Escola e) throws SQLException {
         String sql = """
                 INSERT INTO escola (nom, poblacio, aproximacio, popularitat)
@@ -33,12 +44,15 @@ public class EscolaDAO {
             ps.setString(4, e.getPopularitat());
             ps.executeUpdate();
 
+            // Obtenim l'ID autoincremental i el guardem al model.
             ResultSet keys = ps.getGeneratedKeys();
             if (keys.next()) e.setIdEscola(keys.getInt(1));
         }
     }
 
-    // ── READ ONE per id ──
+    // ── READ (Consultes) ──
+
+    /** Cerca una escola pel seu ID (Clau Primària). */
     public Escola cercarPerId(int id) throws SQLException {
         String sql = "SELECT * FROM escola WHERE id_escola = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -50,7 +64,7 @@ public class EscolaDAO {
         }
     }
 
-    // ── READ ONE per nom ──
+    /** Cerca una escola pel seu nom (útil per a cercadors o validacions de duplicats). */
     public Escola cercarPerNom(String nom) throws SQLException {
         String sql = "SELECT * FROM escola WHERE nom = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -62,7 +76,7 @@ public class EscolaDAO {
         }
     }
 
-    // ── READ ALL ──
+    /** Retorna totes les escoles ordenades alfabèticament. */
     public List<Escola> llistarTotes() throws SQLException {
         List<Escola> llista = new ArrayList<>();
         String sql = "SELECT * FROM escola ORDER BY nom";
@@ -74,8 +88,14 @@ public class EscolaDAO {
         return llista;
     }
 
-    // ── Compta el total de vies de totes les taules d'una escola ──
+    // ── CONSULTES AVANÇADES ──
+
+    /**
+     * Calcula el número total de vies d'una escola sumant les esportives, 
+     * clàssiques i de gel de tots els seus sectors.
+     */
     public int comptarVies(int idEscola) throws SQLException {
+        // Fem tres subconsultes que uneixen (JOIN) les vies amb els sectors de l'escola indicada.
         String sql = """
             SELECT
               (SELECT COUNT(*) FROM via_esportiva ve JOIN sector s ON ve.id_sector = s.id_sector WHERE s.id_escola = ?)
@@ -94,9 +114,13 @@ public class EscolaDAO {
         }
     }
 
-    // ── Escoles que tenen algun sector amb restriccions ──
+    /**
+     * Retorna les escoles que tenen sectors amb algun tipus de restricció activa.
+     * Útil per a avisos de seguretat o protecció del medi ambient.
+     */
     public List<Escola> llistarAmbRestriccions() throws SQLException {
         List<Escola> llista = new ArrayList<>();
+        // SELECT DISTINCT per evitar que una escola surti repetida si té diversos sectors restringits.
         String sql = """
             SELECT DISTINCT e.* FROM escola e
             JOIN sector s ON s.id_escola = e.id_escola
@@ -111,7 +135,10 @@ public class EscolaDAO {
         return llista;
     }
 
-    // ── UPDATE ──
+    // ── UPDATE (Modificació) ──
+    /**
+     * Actualitza les dades d'una escola existent.
+     */
     public void modificar(Escola e) throws SQLException {
         String sql = """
                 UPDATE escola SET nom = ?, poblacio = ?, aproximacio = ?, popularitat = ?
@@ -128,7 +155,11 @@ public class EscolaDAO {
         }
     }
 
-    // ── DELETE ──
+    // ── DELETE (Eliminació) ──
+    /**
+     * Elimina una escola pel seu ID. 
+     * Nota: Pot fallar si hi ha sectors associats (per restriccions d'integritat referencial).
+     */
     public void eliminar(int id) throws SQLException {
         String sql = "DELETE FROM escola WHERE id_escola = ?";
         try (Connection conn = DBConnection.getConnection();
