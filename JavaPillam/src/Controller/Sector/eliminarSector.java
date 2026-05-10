@@ -9,11 +9,11 @@ import java.util.Scanner;
 
 public class eliminarSector {
 
-    private static final SectorDAO sectorDAO = new SectorDAO();
+    private static final SectorDAO      sectorDAO      = new SectorDAO();
     private static final ViaEsportivaDAO viaEsportivaDAO = new ViaEsportivaDAO();
-    private static final ViaClassicaDAO viaClassicaDAO = new ViaClassicaDAO();
-    private static final ViaGelDAO viaGelDAO = new ViaGelDAO();
-    private static final TramDAO tramDAO = new TramDAO();
+    private static final ViaClassicaDAO  viaClassicaDAO  = new ViaClassicaDAO();
+    private static final ViaGelDAO       viaGelDAO       = new ViaGelDAO();
+    private static final TramDAO         tramDAO         = new TramDAO();
 
     public static void eliminarSect() {
         Scanner sc = new Scanner(System.in);
@@ -73,6 +73,10 @@ public class eliminarSector {
         System.out.println("  - " + totalTrams + " tram(s)");
     }
 
+    /**
+     * Elimina en cadena: trams -> vies -> sector.
+     * Public perquè eliminarEscola el reutilitza per cada sector de l'escola.
+     */
     public static void eliminarEnCadena(int idSector) throws SQLException {
         for (ViaEsportiva v : viaEsportivaDAO.llistarPerSector(idSector)) {
             tramDAO.eliminarPerViaEsportiva(v.getIdVia());

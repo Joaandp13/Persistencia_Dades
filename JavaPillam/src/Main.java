@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             DBConnection.getConnection();
-            ActualitzarEstatsDAO.comprovarIActualitzar(); // <- aquí
+            ActualitzarEstatsDAO.comprovarIActualitzar();
             menuPrincipal menu = new menuPrincipal();
             menu.mostrar();
         } catch (Exception e) {

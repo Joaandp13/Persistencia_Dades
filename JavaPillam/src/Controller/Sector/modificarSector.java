@@ -42,6 +42,7 @@ public class modificarSector {
             String restr = sc.nextLine();
             if (!restr.isBlank()) s.setRestriccions(restr);
 
+            // Atenció: canviar tipusVies pot deixar vies existents incoherents amb el sector
             System.out.print("Nou tipus de vies (gel/classica_esportiva) [" + s.getTipusVies() + "]: ");
             String tipus = sc.nextLine();
             if (!tipus.isBlank()) s.setTipusVies(tipus);

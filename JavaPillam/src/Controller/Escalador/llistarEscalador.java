@@ -2,9 +2,9 @@ package Controller.Escalador;
 
 import Model.DAO.Clases.EscaladorDAO;
 import Model.Objectes.Escalador;
+import Vista.Utils;
 import java.util.List;
 import java.util.Scanner;
-import Vista.Utils;
 
 public class llistarEscalador {
 
@@ -46,7 +46,7 @@ public class llistarEscalador {
         Utils.esperarEnter();
     }
 
-    // Consulta especifica: escaladors amb el mateix nivell maxim
+    // Consulta especifica de l'enunciat: escaladors que han assolit el mateix nivell maxim
     public static void llistarPerNivell() {
         Scanner sc = new Scanner(System.in);
         EscaladorDAO dao = new EscaladorDAO();

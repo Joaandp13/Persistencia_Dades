@@ -5,6 +5,7 @@ import Model.Objectes.Escola;
 import java.util.Scanner;
 
 public class crearEscola {
+
     public static void crearEsco() {
         Scanner sc = new Scanner(System.in);
         EscolaDAO dao = new EscolaDAO();
@@ -16,7 +17,6 @@ public class crearEscola {
             System.out.print("Poblacio: ");
             String poblacio = sc.nextLine();
             if (poblacio.isBlank()) poblacio = null;
-            else poblacio = poblacio.trim();
 
             System.out.print("Aproximacio (com arribar): ");
             String aproximacio = sc.nextLine();
@@ -26,7 +26,8 @@ public class crearEscola {
             String popularitat = sc.nextLine();
             if (popularitat.isBlank()) popularitat = null;
 
-            Escola e = new Escola(0, nom, poblacio, aproximacio, popularitat);
+            // Constructor sense id — MySQL l'assigna amb AUTO_INCREMENT
+            Escola e = new Escola(nom, poblacio, aproximacio, popularitat);
             dao.inserir(e);
             System.out.println("Escola creada correctament amb id: " + e.getIdEscola());
 
