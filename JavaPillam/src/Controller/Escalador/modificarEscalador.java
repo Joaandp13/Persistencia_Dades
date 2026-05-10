@@ -13,9 +13,12 @@ public class modificarEscalador {
         System.out.println("----------- MODIFICAR ESCALADOR -----------");
 
         try {
+            // Usem nextLine() + parseInt per consistència amb la resta de controllers
+            // (nextInt() deixa el buffer brut i pot causar problemes)
             System.out.print("ID de l'escalador a modificar: ");
-            int id = sc.nextInt();
-            sc.nextLine(); // limpia buffer tras nextInt
+            String inputId = sc.nextLine();
+            if (inputId.isBlank()) return;
+            int id = Integer.parseInt(inputId);
 
             Escalador e = dao.cercarPerId(id);
             if (e == null) {
@@ -53,6 +56,8 @@ public class modificarEscalador {
             dao.modificar(e);
             System.out.println("Escalador modificat correctament.");
 
+        } catch (NumberFormatException ex) {
+            System.out.println("Format numèric invàlid.");
         } catch (IllegalArgumentException ex) {
             System.out.println("Dada incorrecta: " + ex.getMessage());
         } catch (Exception ex) {

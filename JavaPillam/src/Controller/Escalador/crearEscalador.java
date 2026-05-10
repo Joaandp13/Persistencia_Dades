@@ -22,7 +22,7 @@ public class crearEscalador {
 
             System.out.print("Edat: ");
             int edat = sc.nextInt();
-            sc.nextLine(); // limpia el buffer tras nextInt()
+            sc.nextLine(); // neteja el buffer després de nextInt()
 
             System.out.print("Nivell màxim assolit (ex: 6a, 7b+, 9c+): ");
             String nivell = sc.nextLine();
@@ -36,19 +36,15 @@ public class crearEscalador {
             String estilPreferit = sc.nextLine();
             if (estilPreferit.isBlank()) estilPreferit = null;
 
-            // Crea el objeto — los setters validarán los datos
+            // Els setters validen format i rang — si alguna dada és incorrecta, llancen IllegalArgumentException
             Escalador e = new Escalador(nom, alias, edat, nivell, viaMaxNivell, estilPreferit, null);
-
-            // Inserta en la BDD
             dao.inserir(e);
 
             System.out.println("Escalador creat correctament amb id: " + e.getIdEscalador());
 
         } catch (IllegalArgumentException ex) {
-            // Error de validación del setter (edat < 10, nivell inválido, etc.)
             System.out.println("Dada incorrecta: " + ex.getMessage());
         } catch (Exception ex) {
-            // Error de BDD u otro inesperado
             System.out.println("Error en crear l'escalador: " + ex.getMessage());
         }
     }

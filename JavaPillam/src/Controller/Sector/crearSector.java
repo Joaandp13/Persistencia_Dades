@@ -6,6 +6,7 @@ import Model.Objectes.Sector;
 import java.util.Scanner;
 
 public class crearSector {
+
     public static void crearSect() {
         Scanner sc = new Scanner(System.in);
         SectorDAO dao = new SectorDAO();
@@ -21,6 +22,7 @@ public class crearSector {
             if (inputEscola.isBlank()) return;
             int idEscola = Integer.parseInt(inputEscola);
 
+            // Validem que l'escola existeix abans de continuar
             if (escolaDAO.cercarPerId(idEscola) == null) {
                 System.out.println("Escola no trobada.");
                 return;
@@ -44,6 +46,8 @@ public class crearSector {
             String restriccions = sc.nextLine();
             if (restriccions.isBlank()) restriccions = null;
 
+            // Defineix si el sector admetrà vies de gel o de clàssica/esportiva
+            // Un cop creat, canviar el tipus pot trencar la coherència amb les vies existents
             System.out.print("Tipus de vies (gel / classica_esportiva): ");
             String tipusVies = sc.nextLine();
 

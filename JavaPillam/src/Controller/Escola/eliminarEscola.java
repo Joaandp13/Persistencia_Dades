@@ -9,12 +9,13 @@ import java.util.Scanner;
 
 public class eliminarEscola {
 
-    private static final EscolaDAO escolaDAO = new EscolaDAO();
-    private static final SectorDAO sectorDAO = new SectorDAO();
+    // DAOs com a camps estàtics — es reutilitzen a mostrarResum i eliminarEnCadena
+    private static final EscolaDAO escolaDAO         = new EscolaDAO();
+    private static final SectorDAO sectorDAO         = new SectorDAO();
     private static final ViaEsportivaDAO viaEsportivaDAO = new ViaEsportivaDAO();
-    private static final ViaClassicaDAO viaClassicaDAO = new ViaClassicaDAO();
-    private static final ViaGelDAO viaGelDAO = new ViaGelDAO();
-    private static final TramDAO tramDAO = new TramDAO();
+    private static final ViaClassicaDAO  viaClassicaDAO  = new ViaClassicaDAO();
+    private static final ViaGelDAO       viaGelDAO       = new ViaGelDAO();
+    private static final TramDAO tramDAO             = new TramDAO();
 
     public static void eliminarEsco() {
         Scanner sc = new Scanner(System.in);
@@ -34,13 +35,14 @@ public class eliminarEscola {
                 }
 
                 System.out.println("Escola seleccionada:\n" + e);
-                mostrarResum(e.getIdEscola());
+                mostrarResum(e.getIdEscola()); // mostra quant s'eliminarà
 
                 System.out.print("\nEliminar escola i TOTES les dades associades? (y/n): ");
                 if (!sc.nextLine().equalsIgnoreCase("y")) continue;
 
                 System.out.print("CONFIRMACIÓ FINAL - AQUESTA ACCIÓ ÉS IRREVERSIBLE (y/n): ");
                 if (sc.nextLine().equalsIgnoreCase("y")) {
+                    // Eliminació: trams -> vies -> sectors -> escola
                     eliminarEnCadena(e.getIdEscola());
                     System.out.println("Escola i totes les dades associades eliminades correctament.");
                     return;
@@ -54,6 +56,7 @@ public class eliminarEscola {
         }
     }
 
+    /** Compta i mostra el total de dades que s'eliminaran abans de confirmar. */
     private static void mostrarResum(int idEscola) throws SQLException {
         List<Sector> sectors = sectorDAO.llistarPerEscola(idEscola);
         int totalVies = 0;
@@ -81,26 +84,12 @@ public class eliminarEscola {
         System.out.println("  - " + totalTrams + " tram(s)");
     }
 
+    /** Elimina en cascada: trams -> vies -> sectors -> escola. */
     private static void eliminarEnCadena(int idEscola) throws SQLException {
         List<Sector> sectors = sectorDAO.llistarPerEscola(idEscola);
 
         for (Sector s : sectors) {
-            int idSector = s.getIdSector();
-
-            for (ViaEsportiva v : viaEsportivaDAO.llistarPerSector(idSector)) {
-                tramDAO.eliminarPerViaEsportiva(v.getIdVia());
-                viaEsportivaDAO.eliminar(v.getIdVia());
-            }
-            for (ViaClassica v : viaClassicaDAO.llistarPerSector(idSector)) {
-                tramDAO.eliminarPerViaClassica(v.getIdVia());
-                viaClassicaDAO.eliminar(v.getIdVia());
-            }
-            for (ViaGel v : viaGelDAO.llistarPerSector(idSector)) {
-                tramDAO.eliminarPerViaGel(v.getIdVia());
-                viaGelDAO.eliminar(v.getIdVia());
-            }
-
-            sectorDAO.eliminar(s.getIdSector());
+            eliminarSector.eliminarEnCadena(s.getIdSector());
         }
 
         escolaDAO.eliminar(idEscola);

@@ -3,7 +3,6 @@ package Controller.Sector;
 import Model.DAO.Clases.SectorDAO;
 import Model.Objectes.Sector;
 import Vista.Utils;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,6 +26,7 @@ public class llistarSector {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        Utils.esperarEnter();
     }
 
     public static void llistarTots() {
@@ -47,7 +47,7 @@ public class llistarSector {
         Utils.esperarEnter();
     }
 
-    // Consulta especifica: sectors amb mes de X vies disponibles
+    // Consulta especifica de l'enunciat: sectors amb mes de X vies en estat apte
     public static void llistarAmbMesDeXVies() {
         Scanner sc = new Scanner(System.in);
         SectorDAO dao = new SectorDAO();

@@ -2,9 +2,9 @@ package Controller.Escola;
 
 import Model.DAO.Clases.EscolaDAO;
 import Model.Objectes.Escola;
+import Vista.Utils;
 import java.util.List;
 import java.util.Scanner;
-import Vista.Utils;
 
 public class llistarEscola {
 
@@ -21,6 +21,7 @@ public class llistarEscola {
             if (e == null) System.out.println("Escola no trobada.");
             else {
                 System.out.println(e);
+                // num_vies no s'emmagatzema a la BDD — es calcula amb COUNT(*)
                 System.out.println("  num_vies = " + dao.comptarVies(e.getIdEscola()));
             }
         } catch (NumberFormatException ex) {
@@ -48,7 +49,7 @@ public class llistarEscola {
         Utils.esperarEnter();
     }
 
-    // Consulta especifica: escoles amb restriccions actives
+    // Consulta especifica de l'enunciat: escoles que tenen algun sector amb restriccions
     public static void llistarAmbRestriccions() {
         EscolaDAO dao = new EscolaDAO();
         System.out.println("----------- ESCOLES AMB RESTRICCIONS -----------");
