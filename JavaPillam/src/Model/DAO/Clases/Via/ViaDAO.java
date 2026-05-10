@@ -1,3 +1,4 @@
+// Defineix el paquet base per a la jerarquia de DAOs de Vies.
 package Model.DAO.Clases.Via;
 
 import Model.DAO.DBConnection;
@@ -5,33 +6,54 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ViaDAO: Classe abstracta genèrica que defineix el comportament base per a 
+ * qualsevol tipus de via (Esportiva, Clàssica, Gel).
+ * @param <T> El tipus d'objecte de via que gestionarà la subclasse.
+ */
 public abstract class ViaDAO<T> {
 
-    // Cada subclasse diu de quina taula és
+    // ── MÈTODES ABSTRACTES (Han de ser implementats per les subclasses) ──
+
+    /** Retorna el nom de la taula (ex: "via_esportiva"). */
     protected abstract String getTaula();
 
-    // Cada subclasse sap com convertir una fila en el seu objecte
+    /** Converteix una fila de la BDD en l'objecte del tipus T. */
     protected abstract T mapRow(ResultSet rs) throws SQLException;
 
-    // Cada subclasse sap com fer el INSERT i l'UPDATE
+    /** Defineix els paràmetres per a la sentència d'inserció. */
     protected abstract void setInserirParams(PreparedStatement ps, T via) throws SQLException;
+    
+    /** Defineix els paràmetres per a la sentència de modificació. */
     protected abstract void setModificarParams(PreparedStatement ps, T via) throws SQLException;
+    
+    /** Retorna la cadena SQL d'inserció. */
     protected abstract String getSqlInserir();
+    
+    /** Retorna la cadena SQL d'actualització. */
     protected abstract String getSqlModificar();
+    
+    /** Assigna l'ID generat per la BDD a l'objecte Java. */
     protected abstract void setIdGenerat(T via, int id);
 
     // ── CREATE ──
+    /**
+     * Insereix una via a la base de dades i recupera la seva clau primària.
+     */
     public void inserir(T via) throws SQLException {
         Connection conn = DBConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(getSqlInserir(), Statement.RETURN_GENERATED_KEYS);
         setInserirParams(ps, via);
         ps.executeUpdate();
+        
         ResultSet keys = ps.getGeneratedKeys();
         if (keys.next()) setIdGenerat(via, keys.getInt(1));
         ps.close();
     }
 
-    // ── READ ONE ──
+    // ── READ (Consultes genèriques) ──
+
+    /** Cerca una via per ID a la taula corresponent. */
     public T cercarPerId(int id) throws SQLException {
         String sql = "SELECT * FROM " + getTaula() + " WHERE id_via = ?";
         Connection conn = DBConnection.getConnection();
@@ -43,7 +65,7 @@ public abstract class ViaDAO<T> {
         return via;
     }
 
-    // ── READ ALL ──
+    /** Llista totes les vies de la taula ordenades per nom. */
     public List<T> llistarTotes() throws SQLException {
         List<T> llista = new ArrayList<>();
         String sql = "SELECT * FROM " + getTaula() + " ORDER BY nom";
@@ -55,7 +77,7 @@ public abstract class ViaDAO<T> {
         return llista;
     }
 
-    // ── READ per sector ──
+    /** Filtra les vies segons el sector on es troben. */
     public List<T> llistarPerSector(int idSector) throws SQLException {
         List<T> llista = new ArrayList<>();
         String sql = "SELECT * FROM " + getTaula() + " WHERE id_sector = ? ORDER BY nom";
@@ -68,7 +90,7 @@ public abstract class ViaDAO<T> {
         return llista;
     }
 
-    // ── READ per estat ──
+    /** Filtra les vies per estat (apte, tancada, construccio). */
     public List<T> llistarPerEstat(String estat) throws SQLException {
         List<T> llista = new ArrayList<>();
         String sql = "SELECT * FROM " + getTaula() + " WHERE estat = ? ORDER BY nom";
@@ -81,7 +103,9 @@ public abstract class ViaDAO<T> {
         return llista;
     }
 
-    // ── READ vies aptes d'una escola ──
+    /** * Consulta complexa: Retorna només les vies "aptes" que pertanyen a una escola 
+     * concreta fent un JOIN amb la taula de sectors.
+     */
     public List<T> llistarAptesPerEscola(int idEscola) throws SQLException {
         List<T> llista = new ArrayList<>();
         String sql = "SELECT v.* FROM " + getTaula() + " v " +
@@ -96,7 +120,7 @@ public abstract class ViaDAO<T> {
         return llista;
     }
 
-    // ── READ per rang de grau ──
+    /** Filtra vies segons un rang de dificultat (grau). */
     public List<T> llistarPerRangGrau(String grauMin, String grauMax) throws SQLException {
         List<T> llista = new ArrayList<>();
         String sql = "SELECT * FROM " + getTaula() + " WHERE grau >= ? AND grau <= ? ORDER BY grau";
@@ -110,7 +134,9 @@ public abstract class ViaDAO<T> {
         return llista;
     }
 
-    // ── READ vies recentment aptes ──
+    /** * Lògica de negoci: Vies que han passat a estat 'apte' en els darrers 30 dies.
+     * Útil per a la secció de "Novetats".
+     */
     public List<T> llistarRecentmentAptes() throws SQLException {
         List<T> llista = new ArrayList<>();
         String sql = "SELECT * FROM " + getTaula() +
@@ -126,7 +152,7 @@ public abstract class ViaDAO<T> {
         return llista;
     }
 
-    // ── READ vies més llargues d'una escola ──
+    /** Ordena les vies d'una escola de la més llarga a la més curta. */
     public List<T> llistarMesLlarguesPerEscola(int idEscola) throws SQLException {
         List<T> llista = new ArrayList<>();
         String sql = "SELECT v.* FROM " + getTaula() + " v " +
@@ -142,6 +168,8 @@ public abstract class ViaDAO<T> {
     }
 
     // ── UPDATE ──
+
+    /** Modifica tots els camps d'una via. */
     public void modificar(T via) throws SQLException {
         Connection conn = DBConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(getSqlModificar());
@@ -150,7 +178,7 @@ public abstract class ViaDAO<T> {
         ps.close();
     }
 
-    // ── UPDATE estat ──
+    /** Actualització ràpida només de l'estat i les dates de restricció. */
     public void actualitzarEstat(int idVia, String nouEstat,
                                  Date dataInici, Date dataFi) throws SQLException {
         String sql = "UPDATE " + getTaula() +
@@ -167,6 +195,8 @@ public abstract class ViaDAO<T> {
     }
 
     // ── DELETE ──
+
+    /** Elimina una via pel seu ID. */
     public void eliminar(int id) throws SQLException {
         String sql = "DELETE FROM " + getTaula() + " WHERE id_via = ?";
         Connection conn = DBConnection.getConnection();
@@ -176,12 +206,15 @@ public abstract class ViaDAO<T> {
         ps.close();
     }
 
-    // ── Utilitat per llegir nullables de MySQL ──
+    // ── UTILITATS DE SUPORT PER A LES SUBCLASSES ──
+
+    /** Gestiona la lectura d'enters que poden ser NULL a la BDD. */
     protected Integer getIntOrNull(ResultSet rs, String col) throws SQLException {
         int val = rs.getInt(col);
         return rs.wasNull() ? null : val;
     }
 
+    /** Gestiona la conversió de java.sql.Date a java.time.LocalDate (permet nuls). */
     protected java.time.LocalDate getDateOrNull(ResultSet rs, String col) throws SQLException {
         Date d = rs.getDate(col);
         return d != null ? d.toLocalDate() : null;
