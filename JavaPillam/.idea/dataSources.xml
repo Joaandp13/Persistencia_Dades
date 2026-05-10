@@ -1,49 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project version="4">
   
-# Aquest component és el gestor principal ('DataSourceManagerImpl') encarregat d'administrar totes les bases de dades configurades al teu editor.
-# El paràmetre 'multifile-model="true"' indica que la configuració es pot repartir en diversos fitxers físics.
-        <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     
-# Defineix una font de dades ('data-source') específica. 
-# 'source="LOCAL"' significa que la connexió està guardada només en la teva màquina i no es comparteix amb l'equip.
-# 'name' és l'àlies o nom visual que et surt a la pestanya de l'editor.
-# 'uuid' és un identificador únic universal i irrepetible que l'editor fa servir internament per no perdre el rastre d'aquesta base de dades.
-                <data-source source="LOCAL" name="pillam@localhost" uuid="18db8a52-cf93-4169-abf6-405ce583a8ae">
+        <data-source source="LOCAL" name="pillam@localhost" uuid="18db8a52-cf93-4169-abf6-405ce583a8ae">
       
-# Fa referència a la configuració base del motor de base de dades; l'IDE sap automàticament que tractarà amb la sintaxi pròpia de MySQL 8.
-                        <driver-ref>mysql.8</driver-ref>
+            <driver-ref>mysql.8</driver-ref>
       
-# Aquesta etiqueta en 'true' ordena a l'editor que mantingui l'esquema de la base de dades actualitzat en temps real per saber quines taules o columnes noves hi ha.
-                        <synchronize>true</synchronize>
+            <synchronize>true</synchronize>
       
-# Indica al programa quina llibreria de Java (el driver JDBC específic de MySQL) ha de carregar en memòria per aconseguir connectar-se al motor.
-                        <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+            <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       
-# És l'adreça de connexió (URL). Construeix la petició al teu propi ordinador ('localhost'), pel port per defecte de MySQL ('3306') cap a la base de dades anomenada 'pillam'.
-                        <jdbc-url>jdbc:mysql://localhost:3306/pillam</jdbc-url>
+            <jdbc-url>jdbc:mysql://localhost:3306/pillam</jdbc-url>
       
-# Bloc que emmagatzema variables de configuració i propietats avançades addicionals de connexió per al driver.
-                        <jdbc-additional-properties>
+            <jdbc-additional-properties>
         
-# Propietat que reserva l'espai per indicar el port del host en cas que estiguessis treballant amb una base de dades dins de Kubernetes (actualment sense valor).
-                                <property name="com.intellij.clouds.kubernetes.db.host.port" />
+                <property name="com.intellij.clouds.kubernetes.db.host.port" />
         
-# Desactiva explícitament (amb 'value="false"') el suport per establir aquesta connexió a través dels entorns del núvol o clústers de Kubernetes.
-                                <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
+                <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
         
-# De la mateixa manera, reserva l'espai pel port del contenidor de Kubernetes, però es deixa buit ja que estàs apuntant a un localhost estàndard.
-                                <property name="com.intellij.clouds.kubernetes.db.container.port" />
+                <property name="com.intellij.clouds.kubernetes.db.container.port" />
         
-                        </jdbc-additional-properties>
+            </jdbc-additional-properties>
       
-# Estableix el directori on s'executarà qualsevol comanda relacionada amb aquesta connexió.
-# La variable interna '$ProjectFileDir$' s'expandeix cap a la carpeta arrel on tinguis desat el teu codi font.
-                        <working-dir>$ProjectFileDir$</working-dir>
+            <working-dir>$ProjectFileDir$</working-dir>
       
-                </data-source>
+        </data-source>
     
-        </component>
+    </component>
   
 </project>
